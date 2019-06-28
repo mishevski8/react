@@ -1,19 +1,28 @@
-import React, {useState} from 'react';
+import React, {Component} from 'react';
 import './App.css';
 import Person from './Person/Person'
 
-const app = () => {
-    const [state, setPersonsState] = useState({
+class App extends Component {
+    state = {
         persons: [
             {name: 'Max', age: 34},
             {name: 'John', age: 23}
         ],
         otherState: 'some other value',
         showPersons: false
-    });
+    };
+    // const [state, setPersonsState] = useState({
+    //     persons: [
+    //         {name: 'Max', age: 34},
+    //         {name: 'John', age: 23}
+    //     ],
+    //     otherState: 'some other value',
+    //     showPersons: false
+    // });
+    //
 
-    const switchNameHandler = (newName) => {
-        setPersonsState({
+    switchNameHandler = (newName) => {
+        this.setState({
             persons: [
                 {name: newName, age: 34},
                 {name: 'John', age: 45}
@@ -21,8 +30,8 @@ const app = () => {
         })
     };
 
-    const nameChangedHandler = (event) => {
-        setPersonsState({
+    nameChangedHandler = (event) => {
+        this.setState({
             persons: [
                 {name: event.target.value, age: 34},
                 {name: 'John', age: 45}
@@ -30,45 +39,49 @@ const app = () => {
         })
     };
 
-    const togglePersonsHandler = () => {
-        const doesShow = state.showPersons;
-        setPersonsState({
-            persons: [
-                {name: 'Max', age: 34},
-                {name: 'John', age: 23}
-            ],
-            otherState: 'some other value',
+    togglePersonsHandler = () => {
+        const doesShow = this.state.showPersons;
+        this.setState({
             showPersons: !doesShow
         });
     };
+    //
+    // const btnStyle = {
+    //     backgroundColor: 'white',
+    //     font: 'inherit',
+    //     border: '1px solid blue',
+    //     marginTop: '1rem',
+    //     padding: '8px',
+    //     cursor: 'pointer'
+    // };
 
-    const btnStyle = {
-        backgroundColor: 'white',
-        font: 'inherit',
-        border: '1px solid blue',
-        marginTop: '1rem',
-        padding: '8px',
-        cursor: 'pointer'
-    };
+    render() {
+        const btnStyle = {
+            backgroundColor: 'white',
+            font: 'inherit',
+            border: '1px solid blue',
+            marginTop: '1rem',
+            padding: '8px',
+            cursor: 'pointer'
+        };
 
+        return (
+            <div className="App">
+                <button onClick={this.togglePersonsHandler} style={btnStyle}>Click me</button>
+                {
+                    this.state.showPersons ?
+                        <div>
+                            <Person name={this.state.persons[0].name}
+                                    age={this.state.persons[0].age}
+                                    changed={this.nameChangedHandler}
+                                    click1={() => this.switchNameHandler('ANam')}/>
+                            <Person name={this.state.persons[1].name} age={this.state.persons[1].age}/>
+                        </div> : null
+                }
 
-    return (
-        <div className="App">
-            <button onClick={togglePersonsHandler} style={btnStyle}>Click me</button>
-            {
-                state.showPersons ?
-                    <div>
-                        <Person name={state.persons[0].name}
-                                age={state.persons[0].age}
-                                changed={nameChangedHandler}
-                                click1={() => switchNameHandler('ANam')}/>
-                        <Person name={state.persons[1].name} age={state.persons[1].age}/>
-                    </div> : null
-            }
+            </div>
+        );
+    }
+}
 
-        </div>
-    );
-
-};
-
-export default app;
+export default App;
