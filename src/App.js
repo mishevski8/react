@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import './App.css';
+import Radium, {StyleRoot} from 'radium'
 import Person from './Person/Person'
+import Validation from './Validation/Validation'
+import Char from './Char/Char';
 
 class App extends Component {
     state = {
@@ -10,16 +13,8 @@ class App extends Component {
             {id: 'dfg4', name: 'Doe', age: 12}
         ],
         otherState: 'some other value',
-        showPersons: false
-    };
-
-    switchNameHandler = (newName) => {
-        this.setState({
-            persons: [
-                {name: newName, age: 34},
-                {name: 'John', age: 45}
-            ]
-        })
+        showPersons: false,
+        userInput: ''
     };
 
     nameChangedHandler = (event, id) => {
@@ -51,15 +46,45 @@ class App extends Component {
         });
     };
 
+    changedInputHandler = (event) => {
+        this.setState({
+            userInput: event.target.value
+        })
+    };
+
+    deleteCharHandler = (index) => {
+        const charListCopy = this.state.userInput.split('');
+        charListCopy.splice(index, 1);
+        const updatedText = charListCopy.join('')
+        this.setState({
+            userInput: updatedText
+        });
+    };
+
     render() {
         const btnStyle = {
-            backgroundColor: 'white',
+            backgroundColor: 'green',
+            color: 'white',
             font: 'inherit',
             border: '1px solid blue',
             marginTop: '1rem',
             padding: '8px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            ':hover': {
+                backgroundColor: 'lightgreen',
+                color: 'black'
+            }
         };
+
+        const classes = [];
+
+        if (this.state.persons.length <= 2) {
+            console.log('here')
+            classes.push('red')
+        }
+        if (this.state.persons.length <= 1) {
+            classes.push('bold')
+        }
 
         let person = null;
 
@@ -73,23 +98,42 @@ class App extends Component {
                                        changed={(event) => this.nameChangedHandler(event, person.id)}
                                        click1={() => this.deletePerson(index)}/>
                     })}
-                    {/*<Person name={this.state.persons[0].name}*/}
-                    {/*        age={this.state.persons[0].age}*/}
-                    {/*        changed={this.nameChangedHandler}*/}
-                    {/*        click1={() => this.switchNameHandler('ANam')}/>*/}
-                    {/*<Person name={this.state.persons[1].name} age={this.state.persons[1].age}/>*/}
-                    {/*<Person name={this.state.persons[2].name} age={this.state.persons[2].age}/>*/}
                 </div>
-            )
-        }
-        return (
-            <div className="App">
-                <button onClick={this.togglePersonsHandler} style={btnStyle}>Click me</button>
-                {person}
+            );
 
-            </div>
+            btnStyle.backgroundColor = 'red';
+            btnStyle[':hover'] = {
+                backgroundColor: 'salmon',
+                color: 'black'
+            }
+        }
+
+        const charList = (
+            this.state.userInput.split('').map((char, index) => {
+                return <Char character={char}
+                             clicked={() => this.deleteCharHandler(index)}
+                             key={index}/>
+            })
+        );
+        return (
+            <StyleRoot>
+                <div className="App">
+                    <button onClick={this.togglePersonsHandler} style={btnStyle}>Click me</button>
+                    {person}
+
+                    <p className={classes.join(' ')}>This worked!</p>
+
+                    <input type="text"
+                           value={this.state.userInput}
+                           onChange={this.changedInputHandler}/>
+                    <p>Length: {this.state.userInput}</p>
+
+                    <Validation inputLength={this.state.userInput.length}/>
+                    {charList}
+                </div>
+            </StyleRoot>
         );
     }
 }
 
-export default App;
+export default Radium(App);
