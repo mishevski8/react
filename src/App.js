@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import './App.css';
-import Radium, {StyleRoot} from 'radium'
+import classes from './App.css';
 import Person from './Person/Person'
 import Validation from './Validation/Validation'
 import Char from './Char/Char';
@@ -70,20 +69,15 @@ class App extends Component {
             marginTop: '1rem',
             padding: '8px',
             cursor: 'pointer',
-            ':hover': {
-                backgroundColor: 'lightgreen',
-                color: 'black'
-            }
         };
 
-        const classes = [];
+        const assignedClasses = [];
 
         if (this.state.persons.length <= 2) {
-            console.log('here')
-            classes.push('red')
+            assignedClasses.push(classes.red)
         }
         if (this.state.persons.length <= 1) {
-            classes.push('bold')
+            assignedClasses.push(classes.bold)
         }
 
         let person = null;
@@ -102,10 +96,6 @@ class App extends Component {
             );
 
             btnStyle.backgroundColor = 'red';
-            btnStyle[':hover'] = {
-                backgroundColor: 'salmon',
-                color: 'black'
-            }
         }
 
         const charList = (
@@ -116,24 +106,22 @@ class App extends Component {
             })
         );
         return (
-            <StyleRoot>
-                <div className="App">
-                    <button onClick={this.togglePersonsHandler} style={btnStyle}>Click me</button>
-                    {person}
+            <div className={classes.App}>
+                <button onClick={this.togglePersonsHandler} style={btnStyle}>Click me</button>
+                {person}
 
-                    <p className={classes.join(' ')}>This worked!</p>
+                <p className={assignedClasses.join(' ')}>This worked!</p>
 
-                    <input type="text"
-                           value={this.state.userInput}
-                           onChange={this.changedInputHandler}/>
-                    <p>Length: {this.state.userInput}</p>
+                <input type="text"
+                       value={this.state.userInput}
+                       onChange={this.changedInputHandler}/>
+                <p>Length: {this.state.userInput}</p>
 
-                    <Validation inputLength={this.state.userInput.length}/>
-                    {charList}
-                </div>
-            </StyleRoot>
+                <Validation inputLength={this.state.userInput.length}/>
+                {charList}
+            </div>
         );
     }
 }
 
-export default Radium(App);
+export default App;
