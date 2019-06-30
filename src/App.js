@@ -3,6 +3,7 @@ import classes from './App.css';
 import Person from './Person/Person'
 import Validation from './Validation/Validation'
 import Char from './Char/Char';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
 
 class App extends Component {
     state = {
@@ -54,22 +55,14 @@ class App extends Component {
     deleteCharHandler = (index) => {
         const charListCopy = this.state.userInput.split('');
         charListCopy.splice(index, 1);
-        const updatedText = charListCopy.join('')
+        const updatedText = charListCopy.join('');
         this.setState({
             userInput: updatedText
         });
     };
 
     render() {
-        const btnStyle = {
-            backgroundColor: 'green',
-            color: 'white',
-            font: 'inherit',
-            border: '1px solid blue',
-            marginTop: '1rem',
-            padding: '8px',
-            cursor: 'pointer',
-        };
+        let btnStyle = '';
 
         const assignedClasses = [];
 
@@ -86,16 +79,17 @@ class App extends Component {
             person = (
                 <div>
                     {this.state.persons.map((person, index) => {
-                        return <Person name={person.name}
-                                       age={person.age}
-                                       key={person.id}
-                                       changed={(event) => this.nameChangedHandler(event, person.id)}
-                                       click1={() => this.deletePerson(index)}/>
+                        return <ErrorBoundary key={person.id}>
+                            <Person name={person.name}
+                                    age={person.age}
+                                    changed={(event) => this.nameChangedHandler(event, person.id)}
+                                    click1={() => this.deletePerson(index)}/>
+                        </ErrorBoundary>
                     })}
                 </div>
             );
 
-            btnStyle.backgroundColor = 'red';
+            btnStyle = classes.Red;
         }
 
         const charList = (
@@ -107,7 +101,7 @@ class App extends Component {
         );
         return (
             <div className={classes.App}>
-                <button onClick={this.togglePersonsHandler} style={btnStyle}>Click me</button>
+                <button className={btnStyle} onClick={this.togglePersonsHandler}>Click me</button>
                 {person}
 
                 <p className={assignedClasses.join(' ')}>This worked!</p>
