@@ -1,13 +1,23 @@
 import React from 'react';
 import classes from './Person.css'
+import styled from 'styled-components'
+
+const StyledDiv = styled.div`
+    width: 60%;
+    margin: 1rem auto;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    padding: 1rem;
+    text-align: center;
+`
 
 const person = (props) => {
     return (
-        <div className={classes.Person}>
-            <p onClick={props.click1}>I',m {props.name}, and I'm {props.age} years old!</p>
+        <StyledDiv>
+            <p onClick={props.onDeletePerson}>I',m {props.name}, and I'm {props.age} years old!</p>
             {/*two way data binding*/}
             <input type="text" onChange={props.changed} value={props.name}/>
-        </div>
+        </StyledDiv>
     )
 };
 

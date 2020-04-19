@@ -83,7 +83,7 @@ class App extends Component {
                             <Person name={person.name}
                                     age={person.age}
                                     changed={(event) => this.nameChangedHandler(event, person.id)}
-                                    click1={() => this.deletePerson(index)}/>
+                                    onDeletePerson={() => this.deletePerson(index)}/>
                         </ErrorBoundary>
                     })}
                 </div>
@@ -99,6 +99,7 @@ class App extends Component {
                              key={index}/>
             })
         );
+
         return (
             <div className={classes.App}>
                 <button className={btnStyle} onClick={this.togglePersonsHandler}>Click me</button>
